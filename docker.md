@@ -300,4 +300,22 @@ Disconnects a container from a network
 
 Displays a detailed information about a network
 
+## Creating Volume
+Creating `Dockerfile`
+```
+FROM ubuntu
+VOLUME ["/myvolume1"]
+```
+then create image from this `Dockerfile`
+
+`docker buid -t myimage`
+
+now create a container from this image
+
+`docker run --it --name mycontainer myimage /bin/bash`
+
+now do `ls`, you can see `myvolume1`
+
+### share volume with other container
+
 
