@@ -301,7 +301,26 @@ Disconnects a container from a network
 Displays a detailed information about a network
 
 ## Creating Volume
-Creating `Dockerfile`
+Volume is simply a directory inside our container
+- Fistly, We have to declare this directory as a volume and then share volume
+- Efen If we stop container, still access volume
+- Volume will be created in container
+- You can declare a directory as volume only while creating container
+- You can't create volume from existing container
+- You can share one volume across any number of containers
+- Volume will not be included when you update an image
+
+You can mapped volume in two ways:
+1. Container <--> Container
+2. Host <--> Container
+
+### Benefits of volume
+- Decoupling container from storage
+- Share volume among different containers
+- Attach volume to containers
+- On deleting container volume does not delete
+
+Create d `Dockerfile` and write
 ```
 FROM ubuntu
 VOLUME ["/myvolume1"]
@@ -310,12 +329,41 @@ then create image from this `Dockerfile`
 
 `docker buid -t myimage`
 
-now create a container from this image
+now create a container from this image & run
 
-`docker run --it --name mycontainer myimage /bin/bash`
+`docker run --it --name container1 myimage /bin/bash`
 
 now do `ls`, you can see `myvolume1`
 
-### share volume with other container
+### share volume with other container Container <--> Container
+
+`docker run -it --name container2(new) --privileged=true --volumes-from container1 ubuntu /bin/bash`
+
+Now after creating container2 myvolume1 is visible whatever you do in one volume, can see from other volume
+
+- touch filex  filey  filez
+- docker start container1
+- docker attach container1
+- ls/myvolume1  #you can see samplefile here filex  filey  filez
+
+Now, try to create volume by using commands
+
+`docker run -it --name container3 -v /volume2 ubuntu /bin/bash`
+
+Do `ls` and `cd` volume2 and then create one file `cont3file` and exit
+now create one more container, and share volume2
+
+`docker run -it --name container4 --priveleged=true --volumes-from container 3 ubuntu /bin/bash`
+
+Now you are inside `container4`, do `ls`, you should see volume2 `cd` to volume2 and create few sample files eg. sample1 sample2, sample3 and do `ls` to verify
+
+now go back to `container3` and navigate to volume2 folder, you should see sample1 sample2 and sample3 files
+
+
+
+
+
+
+
 
 
