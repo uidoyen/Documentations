@@ -320,6 +320,8 @@ You can mapped volume in two ways:
 - Attach volume to containers
 - On deleting container volume does not delete
 
+1. Volume (Container <--> Container)
+
 Create d `Dockerfile` and write
 ```
 FROM ubuntu
@@ -355,11 +357,24 @@ now create one more container, and share volume2
 
 `docker run -it --name container4 --priveleged=true --volumes-from container 3 ubuntu /bin/bash`
 
-Now you are inside `container4`, do `ls`, you should see volume2 `cd` to volume2 and create few sample files eg. sample1 sample2, sample3 and do `ls` to verify
+Now you are inside `container4`, do `ls`, you should see `volume2` `cd` to `volume2` and create few sample files eg. `sample1` `sample2`, `sample3` and do `ls` to verify
 
-now go back to `container3` and navigate to volume2 folder, you should see sample1 sample2 and sample3 files
+go back to `container3` and navigate to volume2 folder, you should see `sample1` `sample2` and `sample3` files
 
+2. Volume (Host <--> Container)
 
+Create and verify few files in 
+`/home/host-user` this is your host folder path(can be anywhere in the host)
+
+`docker run -it --name hostContainer -v /home/host-user:asansari --privileged=true ubuntu /bin/bash`
+
+`:asansari` is `hostContainer` path
+
+`cd asansari`
+
+Do `ls`, now you can see all files of host machine now let's try to create one file under `hostContainer` volume folder and then `exit`
+Now go back to your host folder `/home/host-user`, you can see this file
+ 
 
 
 
